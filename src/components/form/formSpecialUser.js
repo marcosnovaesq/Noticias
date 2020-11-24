@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { FiUserPlus } from 'react-icons/fi';
-import { signUp } from '../../services/user'
+import { updateUser, createSpecialUser } from '../../services/user'
 import history from '../../config/history'
 
-const FormLogin = (props) => {
+const FormSpecialUser = ({ changeComponent, user, reload }) => {
 
 
-    const [form, setForm] = useState({})
+    const [form, setForm] = useState({
+        "userType": 'administrador'
+    })
+    const [isUpdate, setIsUpdate] = useState(false)
 
+    const typeReq = (data) => isUpdate ? updateUser(user._id, data) : createSpecialUser(data)
 
     const handleChange = (event) => {
         setForm({
@@ -29,9 +33,10 @@ const FormLogin = (props) => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const { data } = await signUp(form)
+            const { data } = await typeReq(form)
             clearForm()
-            history.push("/")
+            reload(Math.random())
+            changeComponent('tableUsers')
         } catch (error) {
             console.log(error.message)
         }
@@ -49,21 +54,22 @@ const FormLogin = (props) => {
             <Form.Group controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
                 <Form.Control type="email" placeholder="Enter email" name="email" value={form.email || ""} onChange={(e) => handleChange(e)} />
-                <Form.Text className="text-muted">
-                    Não vamos divulgar seu e-mail para ninguem
-                    </Form.Text>
             </Form.Group>
 
             <Form.Group controlId="formBasicPassword">
                 <Form.Label>Senha</Form.Label>
                 <Form.Control type="password" placeholder="Digite sua senha" name="password" value={form.password || ""} onChange={(e) => handleChange(e)} />
-                <Form.Text className="text-muted">
-                    Nunca pediremos sua senha para nada.
-                    </Form.Text>
             </Form.Group>
             <Form.Group controlId="formBasicPassword">
                 <Form.Label>Confirmação de Senha</Form.Label>
                 <Form.Control type="password" placeholder="Digite sua senha" name="passwordConf" value={form.passwordConf || ""} onChange={(e) => handleChange(e)} />
+            </Form.Group>
+            <Form.Group controlId="exampleForm.ControlSelect1">
+                <Form.Label>Papel do Usuario</Form.Label>
+                <Form.Control as="select" name="userType" onChange={(e) => handleChange(e)} >
+                    <option value='administrador' >administrador</option>
+                    <option value='reporter' >reporter</option>
+                </Form.Control>
             </Form.Group>
             <Button variant="success" type="submit" disabled={!formIsPreenchido()} onClick={(e) => handleSubmit(e)} block>
                 Enviar <FiUserPlus className="ml-2" />
@@ -73,4 +79,4 @@ const FormLogin = (props) => {
 }
 
 
-export default FormLogin;
+export default FormSpecialUser;

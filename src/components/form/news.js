@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Form, Button, Container, Col } from 'react-bootstrap';
+import { Form, Button, Col } from 'react-bootstrap';
 import { FiUserPlus } from 'react-icons/fi';
 import styled from 'styled-components';
 import { updateNew, createNew } from '../../services/new'
 
 
-const FormNews = ({ showF, noticia }) => {
+const FormNews = ({ noticia, changeComponent, reload }) => {
 
     const [form, setForm] = useState({})
     const [updatePhoto, setUpdatePhoto] = useState(false)
@@ -73,7 +72,6 @@ const FormNews = ({ showF, noticia }) => {
 
         let data = new FormData()
 
-
         Object.keys(form)
             .forEach(key => data.append(key, form[key]))
 
@@ -86,7 +84,8 @@ const FormNews = ({ showF, noticia }) => {
         typeReq(data, config)
             .then((res) => {
                 clearForm()
-                showF(false)
+                changeComponent('tableNews')
+                reload(Math.random())
             })
             .catch((err) => console.log(`Erro ao cadastrar noticia.`))
     }
@@ -104,15 +103,15 @@ const FormNews = ({ showF, noticia }) => {
 
     return (
         <Form className="p-5 " style={{ backgroundColor: '#F6F6F6' }}>
-            <Button variant="outline-primary" onClick={() => showF(false)}>Voltar</Button>
+            <Button variant="outline-primary" onClick={() => changeComponent('panel')}>Voltar</Button>
             <h3 className="mb-4 text-center"> Nova notícia</h3>
             <Form.Group controlId="formBasicTitle">
                 <Form.Label>Titulo</Form.Label>
-                <Form.Control type="text" placeholder="Digite o conteudo" name="title" onChange={(e) => handleChange(e)} />
+                <Form.Control type="text" placeholder="Digite o conteudo" name="title" onChange={(e) => handleChange(e)} value={form.title || ''} />
             </Form.Group>
             <Form.Group size="sm" controlId="formBasicContent">
                 <Form.Label>Conteudo</Form.Label>
-                <Form.Control style={{ height: 200 }} as="textarea" placeholder="Digie o conteudo da materia" name="content" onChange={(e) => handleChange(e)} />
+                <Form.Control style={{ height: 200 }} as="textarea" placeholder="Digie o conteudo da materia" name="content" onChange={(e) => handleChange(e)} value={form.content || ""} />
             </Form.Group>
 
             <Form.Group className="mt-4 pl-0" as={Col} md={4} >
@@ -128,7 +127,7 @@ const FormNews = ({ showF, noticia }) => {
 
             <Form.Group controlId="formBasicCategory">
                 <Form.Label>Categorias</Form.Label>
-                <Form.Control type="text" placeholder="Digite a categoria" name="category" onChange={(e) => handleChange(e)} />
+                <Form.Control type="text" placeholder="Digite a categoria" name="category" onChange={(e) => handleChange(e)} value={form.category || ""} />
             </Form.Group>
             <Button variant="success" type="submit" disabled={isNotValid()} onClick={(e) => submitForm(e)} block>
                 {buttonText()} <FiUserPlus className="ml-2" />

@@ -4,14 +4,14 @@ import { FaChevronRight } from "react-icons/fa";
 import { useHistory } from 'react-router-dom';
 import { signIn } from '../../services/user'
 import UserContext from '../../context/usercontext';
-import jwt from 'jsonwebtoken';
 import { saveToken } from '../../config/auth';
+import clientHttp from '../../config/clientHttp'
 
 const ModalSignIn = ({ show, close }) => {
 
     const history = useHistory();
     const [form, setForm] = useState({})
-    const { usuarioLogado, setUsuarioLogado } = useContext(UserContext)
+    const { setUsuarioLogado } = useContext(UserContext)
 
     const trocaPagina = () => {
         close();
@@ -39,14 +39,12 @@ const ModalSignIn = ({ show, close }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log(form)
         try {
             const { data } = await signIn(form)
-            console.log(data)
             clearForm()
             handleClose()
-            // const { user } = await jwt.decode(data.token)
             saveToken(data.token)
+            clientHttp.defaults.headers["x-auth-token"] = data.token;
             setUsuarioLogado(data.user)
         } catch (error) {
             console.log(error.message)
@@ -79,7 +77,13 @@ const ModalSignIn = ({ show, close }) => {
                     <Button variant="success" type="submit" disabled={!formIsPreenchido()} onClick={(e) => handleSubmit(e)} block>
                         Enviar <FaChevronRight />
                     </Button>
-                    <p className="text-center mt-4"><a onClick={() => trocaPagina()} href="#"> Nao tem conta? cadastre-se</a></p>
+                    <p className="text-center mt-4">
+
+                        <Button variant="outline-primary" onClick={() => trocaPagina()} block>
+                            Nao tem conta? cadastre-se
+                    </Button>
+
+                    </p>
                 </Form>
             </Modal>
         </>

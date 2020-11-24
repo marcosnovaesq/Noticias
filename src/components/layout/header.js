@@ -1,11 +1,13 @@
-import React, { useState, useContext, useEffect } from 'react'
-import { Navbar, Nav, Button, Modal, Dropdown, DropdownButton, ButtonGroup } from 'react-bootstrap'
-import styled from 'styled-components'
+import React, { useState, useContext } from 'react';
+import logo from '../../assets/default-monochrome.svg';
+import { Navbar, Nav, Button, Dropdown, DropdownButton } from 'react-bootstrap';
+import styled from 'styled-components';
 import { FaChevronRight } from "react-icons/fa";
 import ModalSignIn from './modalSignIn';
 import UserContext from '../../context/usercontext';
 import { removeToken } from '../../config/auth';
-import history from '../../config/history'
+import history from '../../config/history';
+
 
 export default (props) => {
 
@@ -29,6 +31,12 @@ export default (props) => {
     }
 
 
+    const changePage = (page) => {
+        history.push(`/${page}`)
+    }
+
+
+
     const componentLoginOrName = () => {
 
         const usuario = usuarioLogado
@@ -42,10 +50,12 @@ export default (props) => {
                     title={usuario.name}
                     id="dropdown-menu-align-right"
                 >
-                    <Dropdown.Item eventKey="1">Perfil</Dropdown.Item>
-                    <Dropdown.Item eventKey="2">Favoritas</Dropdown.Item>
+                    <Dropdown.Item eventKey="1" onClick={() => changePage(`users/${usuario.id}`)} >Perfil</Dropdown.Item>
+                    {usuario.userType === 'comum' ? <Dropdown.Item eventKey="2">Favoritas</Dropdown.Item> : ""}
+
+                    {!(usuario.userType === 'comum') ? <Dropdown.Item eventKey="3" onClick={(e) => changePage('dashboard')}>Dashboard</Dropdown.Item> : ''}
                     <Dropdown.Divider />
-                    <Dropdown.Item eventKey="3" onClick={(e) => handleLogout(e)}>Logout</Dropdown.Item>
+                    <Dropdown.Item eventKey="4" onClick={(e) => handleLogout(e)}>Logout</Dropdown.Item>
                 </DropdownButton>
             )
         }
@@ -55,7 +65,7 @@ export default (props) => {
         <Header>
 
             <Navbar expand="lg" variant="dark" className="d-flex justify-content-between align-items-center">
-                <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+                <Navbar.Brand href="/"><img src={logo} alt="logo" style={{ height: "90px", width: "140px", backgroundColor: "transparent" }} /></Navbar.Brand>
                 <Nav className="ml-auto">
                     {componentLoginOrName()}
                 </Nav>
@@ -67,6 +77,6 @@ export default (props) => {
 }
 
 const Header = styled.div`
-    background-color: #06AA48;
+    background-color: #2ecc71;
 `
 
