@@ -5,7 +5,7 @@ const localURLAPI = 'http://localhost:3003'
 const prodURLAPI = 'https://gentle-hamlet-30049.herokuapp.com/'
 
 const clientHttp = axios.create({
-    baseURL: process.env.REACT_APP_API || localURLAPI
+    baseURL: process.env.REACT_APP_API || prodURLAPI
 })
 
 clientHttp.defaults.headers['Content-type'] = 'application/json'
