@@ -1,3 +1,6 @@
+Bem vindo ao projeto, a parte de react, se quiser testar o projeto sem baixar o codigo, va para https://crud-noticias-front.vercel.app/ Fique livre para relatar qualquer bug em um comentario!
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
