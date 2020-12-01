@@ -18,7 +18,8 @@ const ShowNew = (props) => {
 
 
     const handleSee = (e, a) => {
-        e.preventDefault()
+        e.preventDefault();
+        console.log(notFound);
         history.push(`/users/${a.user_id}`)
     }
 
@@ -76,14 +77,6 @@ const ShowNew = (props) => {
         <>
             <Coluna md={12} >
                 {montaCorpo()}
-                {/* <Coluna md={12} >
-                <CorpoNoticia>
-                    <h1 className="mb-3 mt-3">{noticia.title}</h1>
-                    <span>Criado por: {noticia.createdBy["user_name"]}, em {noticia.createdAt}</span>
-                    <Imagem src={noticia.photo} className="mb-3" ></Imagem>
-                    <p className="mb-3">{noticia.content}</p>
-                </CorpoNoticia>
-            </Coluna> */}
             </Coluna>
 
         </>
@@ -94,15 +87,6 @@ const Coluna = styled(Col)`
     width: 100%;
     margin-top: 20px;
     margin-bottom: 20px;
-    display: flex;
-    justify-content: center;
-
-`
-
-const ColunaComentarios = styled(Col)`
-    width: 95%;
-    margin: 20px auto 20px auto;
-
     display: flex;
     justify-content: center;
 

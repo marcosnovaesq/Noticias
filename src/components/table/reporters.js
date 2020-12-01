@@ -75,6 +75,7 @@ const TableReporters = ({ reporteres, changeComponent, userType, reload }) => {
 
     useEffect(() => {
         setReporters(reporteres)
+        console.log(reporters)
     }, [reporteres])
 
     return (

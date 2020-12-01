@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from 'react'
 import { Row, Col } from 'react-bootstrap'
 import styled from 'styled-components'
 import UserContext from '../../context/usercontext'
-import history from '../../config/history'
 import { BsPlus, BsFillEyeFill } from 'react-icons/bs';
 import { AiFillWarning } from 'react-icons/ai'
 import FormNews from '../form/news'
@@ -29,9 +28,9 @@ const DashBoard = (props) => {
 
 
 
-    const mudaPage = (rota) => {
-        history.push(`${rota}`)
-    }
+    // const mudaPage = (rota) => {
+    //     history.push(`${rota}`)
+    // }
 
     const pegaNoticias = async (user) => {
         try {
@@ -142,7 +141,7 @@ const DashBoard = (props) => {
             case 'formUser':
                 return <ContainerForm><FormSpecialUser changeComponent={setShowActiveComponent} user={usuarioAtual} reload={setReloadNews} ></FormSpecialUser></ContainerForm>
             case 'tableUsers':
-                return <TableUsers users={usuarios} reload={setReloadNews} changeComponent={setShowActiveComponent} setNew={setNoticiaAtual} userType={usuarioLogado.userType} ></TableUsers>
+                return <TableUsers setarUsuario={setUsuarioAtual} users={usuarios} reload={setReloadNews} changeComponent={setShowActiveComponent} setNew={setNoticiaAtual} userType={usuarioLogado.userType} ></TableUsers>
             case 'tableReporteres':
                 return <TableReporters reporteres={reporters} reload={setReloadNews} changeComponent={setShowActiveComponent} setNew={setNoticiaAtual} userType={usuarioLogado.userType} ></TableReporters>
             default:

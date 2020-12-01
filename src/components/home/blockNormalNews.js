@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Row, Image } from 'react-bootstrap'
+import { Image } from 'react-bootstrap'
 import styled from 'styled-components'
 
 const BlockNormalNews = ({ common, changePage }) => {
