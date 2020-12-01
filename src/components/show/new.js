@@ -17,6 +17,12 @@ const ShowNew = (props) => {
 
 
 
+    const handleSee = (e, a) => {
+        e.preventDefault()
+        history.push(`/users/${a.user_id}`)
+    }
+
+
     useEffect(() => {
         const montaInfosNoticia = async (id) => {
             try {
@@ -50,7 +56,7 @@ const ShowNew = (props) => {
                 return (
                     <CorpoNoticia>
                         <h1 className="mb-1 mt-3">{noticia.title}</h1>
-                        <span className="mb-3">Criado por: {autor.user_name}, em {formataData(noticia.createdAt)}</span>
+                        <span className="mb-3">Criado por: <TituloAutor onClick={(e) => handleSee(e, author)}>{autor.user_name}</TituloAutor>, em {formataData(noticia.createdAt)}</span>
                         <span className="mb-3" ><Badge variant="info">{noticia.category}</Badge></span>
                         <Imagem src={noticia.photo} className="mb-3" ></Imagem>
                         <p className="mb-3">{noticia.content}</p>
@@ -79,9 +85,6 @@ const ShowNew = (props) => {
                 </CorpoNoticia>
             </Coluna> */}
             </Coluna>
-            <ColunaComentarios md={12}>
-                <h2>Comentarios</h2>
-            </ColunaComentarios>
 
         </>
     )
@@ -119,12 +122,12 @@ const CorpoNoticia = styled.div`
     align-items: center;
     flex-direction: column;
     width: 100%;
-
-
 `
-
-const CorpoComentarios = styled.div`
-
+const TituloAutor = styled.span`
+    &:hover{
+        color: blue;
+        cursor: pointer;
+    }
 
 `
 

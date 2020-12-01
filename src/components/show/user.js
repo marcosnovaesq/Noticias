@@ -1,18 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import history from '../../config/history'
-import { Col, Image, Badge } from 'react-bootstrap';
+import { Col, ListGroup, ListGroupItem, Button } from 'react-bootstrap';
 import { getUserById } from '../../services/user'
 import styled from 'styled-components';
 import { formataData } from '../../helpers/dataHelper'
+import { AiFillEye } from 'react-icons/ai';
 
 const ShowUser = (props) => {
 
     const [user, setUser] = useState({})
+    const [news, setNews] = useState([])
     const [notFound, setNotFound] = useState(true)
     const { id } = useParams()
     const [loading, setLoading] = useState(true)
 
+
+    const handleSee = (e, n) => {
+        e.preventDefault()
+        history.push(`/news/${n._id}`)
+    }
 
 
 
@@ -21,6 +28,9 @@ const ShowUser = (props) => {
             try {
                 const usuario = await getUserById(id)
                 setUser(usuario.data)
+                if (usuario.data.userType === 'reporter') {
+                    setNews(usuario.data.news)
+                }
                 setLoading(false)
                 setNotFound(false)
             } catch (error) {
@@ -34,6 +44,42 @@ const ShowUser = (props) => {
     }, [id])
 
 
+    const montaNoticias = () => {
+        if (user.userType === 'reporter') {
+            if (news.length > 0) {
+                return (
+                    < div className="mt-5" >
+                        <h2>Noticias deste reporter:</h2>
+                        <ListGroup>
+                            {news.map((n, i) => {
+                                console.log(n)
+                                if (n.is_active) {
+                                    return <ElementoLista key={i}>{n.title}   <Button variant="outline-info" onClick={(e) => handleSee(e, n)}  ><AiFillEye /> </Button></ElementoLista>
+                                }
+                                else {
+                                    return ""
+                                }
+
+                            })}
+                        </ListGroup>
+                    </div >
+                )
+            }
+            else {
+                return (
+                    < div className="mt-5" >
+                        <h2>Noticias deste reporter:</h2>
+                        <h3>Este reporter nao tem noticias :( </h3>
+                    </div >
+                )
+            }
+        }
+        else {
+            return ""
+        }
+
+    }
+
 
 
     const montaCorpo = () => {
@@ -43,12 +89,16 @@ const ShowUser = (props) => {
             } else {
                 return (
                     <>
-                        <div>
-                            <h1 className="mb-1 mt-3">{user.name}</h1>
-                            <span>{user.email}</span>
-                            <br></br>
-                            <span>Entrou em: {formataData(user.createdAt)}</span>
-                        </div>
+                        <DivTotal>
+                            <div>
+                                <h1 className="mb-1 mt-3">{user.name}</h1>
+                                <span>{user.email}</span>
+                                <br></br>
+                                <span>Entrou em: {formataData(user.createdAt)}</span>
+                            </div>
+                            {montaNoticias()}
+
+                        </DivTotal>
                     </>
                 )
             }
@@ -63,14 +113,6 @@ const ShowUser = (props) => {
         <>
             <Coluna md={12} >
                 {montaCorpo()}
-                {/* <Coluna md={12} >
-                <CorpoNoticia>
-                    <h1 className="mb-3 mt-3">{noticia.title}</h1>
-                    <span>Criado por: {noticia.createdBy["user_name"]}, em {noticia.createdAt}</span>
-                    <Imagem src={noticia.photo} className="mb-3" ></Imagem>
-                    <p className="mb-3">{noticia.content}</p>
-                </CorpoNoticia>
-            </Coluna> */}
             </Coluna>
 
         </>
@@ -86,6 +128,24 @@ const Coluna = styled(Col)`
 
 `
 
+const DivTotal = styled.div`
+
+    display: flex;
+    flex-direction: column;
+
+`
+
+const ElementoLista = styled(ListGroupItem)`
+    
+    display: flex;
+    justify-content: space-between;
+
+    &:hover{
+        background-color: #f2f2f2;
+        cursor: pointer;
+    }
+
+`
 
 
 export default ShowUser
